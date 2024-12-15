@@ -89,5 +89,6 @@ function loadMockTest() {
     questionDiv.appendChild(questionContent);
     testContainer.appendChild(questionDiv);
 }
+
 function rateQuestion(rating) {
     let question =
