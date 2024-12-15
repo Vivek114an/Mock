@@ -74,8 +74,13 @@ button:hover {
     font-size: 18px;
 }
 
-#testQuestions label {
-    font-size: 16px;
+#ratingButtons button {
+    margin: 10px;
+    background: #28a745;
+}
+
+#ratingButtons button:hover {
+    background: #218838;
 }
 
 #navigationButtons {
@@ -91,33 +96,16 @@ button:hover {
     width: 90px;
 }
 
-#results {
-    margin-top: 20px;
-    font-size: 18px;
+#imagePreview {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    display: block;
+    max-width: 300px;
 }
 
-#questionsList {
-    margin-top: 20px;
-}
-
-#questionsList li {
-    margin-bottom: 10px;
-}
-
-button.toggle {
-    background: #28a745;
-}
-
-button.toggle:hover {
-    background: #218838;
-}
-
-button.toggle.dark-mode {
-    background: #ffc107;
-}
-
-button.toggle.dark-mode:hover {
-    background: #e0a800;
+#results ul {
+    margin-top: 10px;
 }
 
 #darkModeBtn, #fullScreenBtn {
