@@ -22,35 +22,38 @@ function showPage(pageNum) {
     }
 }
 
-function saveQuestion() {
+function saveQuestions() {
     let questionText = document.getElementById('questionText').value;
-    let questionImage = document.getElementById('questionImage').files[0];
-    
-    let question = {
-        text: questionText,
-        image: questionImage ? URL.createObjectURL(questionImage) : null,
-        rating: null // Rating is initially not set
-    };
+    let questionImages = document.getElementById('questionImage').files;
 
-    questions.push(question);
-    alert("Question saved!");
+    for (let i = 0; i < questionImages.length; i++) {
+        let question = {
+            text: questionText,
+            image: URL.createObjectURL(questionImages[i]),
+            rating: null // Rating is initially not set
+        };
+        questions.push(question);
+    }
+
+    alert("Questions saved!");
 
     // Clear form for next question
     document.getElementById('questionText').value = '';
     document.getElementById('questionImage').value = '';
-    document.getElementById('imagePreview').classList.add('hidden');
+    document.getElementById('imagePreviewContainer').innerHTML = '';
 
     updateQuestionsList();
 }
 
 function previewImage() {
-    let file = document.getElementById('questionImage').files[0];
-    let preview = document.getElementById('imagePreview');
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.classList.remove('hidden');
-    } else {
-        preview.classList.add('hidden');
+    let files = document.getElementById('questionImage').files;
+    let previewContainer = document.getElementById('imagePreviewContainer');
+    previewContainer.innerHTML = '';
+
+    for (let i = 0; i < files.length; i++) {
+        let img = document.createElement('img');
+        img.src = URL.createObjectURL(files[i]);
+        previewContainer.appendChild(img);
     }
 }
 
@@ -59,7 +62,7 @@ function updateQuestionsList() {
     list.innerHTML = '';
     questions.forEach((q, i) => {
         let li = document.createElement('li');
-        li.textContent = `Q${i + 1}: ${q.text}`;
+        li.innerHTML = `Q${i + 1}: ${q.text} <br> <img src="${q.image}" style="max-width: 100px;">`;
         list.appendChild(li);
     });
 }
@@ -76,3 +79,65 @@ function loadMockTest() {
         let img = document.createElement('img');
         img.src = question.image;
         img.style.maxWidth = '300px';
+        questionContent.appendChild(img);
+    }
+    
+    let questionText = document.createElement('div');
+    questionText.textContent = question.text;
+    questionContent.appendChild(questionText);
+
+    questionDiv.appendChild(questionContent);
+    testContainer.appendChild(questionDiv);
+}
+
+function rateQuestion(rating) {
+    let question = questions[currentQuestionIndex];
+    question.rating = rating;
+}
+
+function startTimer() {
+    timerInterval = setInterval(function () {
+        if (remainingTime <= 0) {
+            clearInterval(timerInterval);
+            alert("Time's up!");
+            submitTest();
+        } else {
+            let minutes = Math.floor(remainingTime / 60);
+            let seconds = remainingTime % 60;
+            document.getElementById('timer').textContent = `Time Left: ${minutes}:${seconds}`;
+            remainingTime--;
+        }
+    }, 1000);
+}
+
+function hideButtonsForTest() {
+    document.querySelectorAll('button').forEach(button => button.classList.add('hidden'));
+}
+
+function submitTest() {
+    // Submit logic here
+    showPage(3);  // Go to results page
+}
+
+function showResults() {
+    let okQuestions = questions.filter(q => q.rating === 'OK');
+    let goodQuestions = questions.filter(q => q.rating === 'Good');
+    let bestQuestions = questions.filter(q => q.rating === 'Best');
+
+    document.getElementById('okQuestions').innerHTML = okQuestions.map(q => `<li>${q.text}</li>`).join('');
+    document.getElementById('goodQuestions').innerHTML = goodQuestions.map(q => `<li>${q.text}</li>`).join('');
+    document.getElementById('bestQuestions').innerHTML = bestQuestions.map(q => `<li>${q.text}</li>`).join('');
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+}
+
+function toggleFullScreen() {
+    if (isFullScreen) {
+        document.exitFullscreen();
+    } else {
+        document.documentElement.requestFullscreen();
+    }
+    isFullScreen = !isFullScreen;
+}
