@@ -14,10 +14,10 @@
         <div id="page1">
             <h2>Insert Questions</h2>
             <form id="questionForm">
-                <input type="text" id="questionText" placeholder="Enter Question Text"><br>
+                <textarea id="questionText" placeholder="Enter Question Text"></textarea><br>
                 <input type="file" id="questionImage" accept="image/*" onchange="previewImage()" multiple><br>
                 <div id="imagePreviewContainer"></div>
-                <button type="button" onclick="saveQuestions()">Save Questions</button>
+                <button type="button" onclick="saveQuestions()">Save Question</button>
             </form>
             <h3>Questions List:</h3>
             <ul id="questionsList"></ul>
