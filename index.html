@@ -15,11 +15,8 @@
             <h2>Insert Questions</h2>
             <form id="questionForm">
                 <input type="text" id="questionText" placeholder="Enter Question Text"><br>
-                <input type="file" id="questionImage" accept="image/*"><br>
-                <input type="text" id="optionA" placeholder="Option A"><br>
-                <input type="text" id="optionB" placeholder="Option B"><br>
-                <input type="text" id="optionC" placeholder="Option C"><br>
-                <input type="text" id="optionD" placeholder="Option D"><br>
+                <input type="file" id="questionImage" accept="image/*" onchange="previewImage()"><br>
+                <img id="imagePreview" src="" alt="Image Preview" class="hidden">
                 <button type="button" onclick="saveQuestion()">Save Question</button>
             </form>
             <h3>Questions List:</h3>
@@ -37,13 +34,23 @@
                     <button type="button" onclick="nextQuestion()">Next</button>
                     <button type="button" onclick="submitTest()">Submit Test</button>
                 </div>
+                <div id="ratingButtons">
+                    <button type="button" onclick="rateQuestion('OK')">OK</button>
+                    <button type="button" onclick="rateQuestion('Good')">Good</button>
+                    <button type="button" onclick="rateQuestion('Best')">Best</button>
+                </div>
             </form>
         </div>
 
         <!-- Page 3: Results -->
         <div id="page3" class="hidden">
             <h2>Results</h2>
-            <div id="results"></div>
+            <h3>OK Questions:</h3>
+            <ul id="okQuestions"></ul>
+            <h3>Good Questions:</h3>
+            <ul id="goodQuestions"></ul>
+            <h3>Best Questions:</h3>
+            <ul id="bestQuestions"></ul>
         </div>
 
         <button onclick="showPage(1)">Insert Questions</button>
