@@ -14,21 +14,18 @@ function showPage(pageNum) {
     if (pageNum === 1) {
         document.getElementById('page1').classList.remove('hidden');
         document.getElementById('insertBtn').classList.remove('hidden');
-        document.getElementById('startTestBtn').classList.remove('hidden');
+        document.getElementById('startTestBtn').classList.add('hidden');
         document.getElementById('showResultsBtn').classList.add('hidden');
-        document.getElementById('navigationButtons').classList.add('hidden');
     } else if (pageNum === 2) {
         document.getElementById('page2').classList.remove('hidden');
         document.getElementById('insertBtn').classList.add('hidden');
+        document.getElementById('startTestBtn').classList.add('hidden');
         document.getElementById('showResultsBtn').classList.add('hidden');
-        document.getElementById('navigationButtons').classList.remove('hidden');
         loadMockTest();
         startTimer();
+        document.getElementById('navigationButtons').classList.remove('hidden');
     } else if (pageNum === 3) {
         document.getElementById('page3').classList.remove('hidden');
-        document.getElementById('insertBtn').classList.add('hidden');
-        document.getElementById('startTestBtn').classList.add('hidden');
-        document.getElementById('navigationButtons').classList.add('hidden');
         showResults();
     }
 }
@@ -59,7 +56,7 @@ function saveQuestions() {
 function previewImage() {
     let files = document.getElementById('questionImage').files;
     let previewContainer = document.getElementById('imagePreviewContainer');
-    previewContainer.innerHTML = '';
+    previewContainer.innerHTML = ''; // Clear previous preview
     for (let i = 0; i < files.length; i++) {
         let img = document.createElement('img');
         img.src = URL.createObjectURL(files[i]);
@@ -67,39 +64,44 @@ function previewImage() {
     }
 }
 
-function rateQuestion(rating) {
-    let currentQuestion = questions[currentQuestionIndex];
-    currentQuestion.rating = rating;
-    updateQuestionsList();
-}
-
 function updateQuestionsList() {
-    let questionsList = document.getElementById('questionsList');
-    questionsList.innerHTML = '';
+    let list = document.getElementById('questionsList');
+    list.innerHTML = ''; // Clear the list
     questions.forEach((question, index) => {
         let li = document.createElement('li');
-        li.textContent = `${question.text} - Rating: ${question.rating || 'Not rated'}`;
-        if (question.image) {
-            let img = document.createElement('img');
-            img.src = question.image;
-            li.appendChild(img);
-        }
-        questionsList.appendChild(li);
+        li.textContent = question.text;
+        list.appendChild(li);
     });
 }
 
 function loadMockTest() {
-    let testQuestionsDiv = document.getElementById('testQuestions');
-    testQuestionsDiv.innerHTML = '';
-    let currentQuestion = questions[currentQuestionIndex];
+    let testQuestionsContainer = document.getElementById('testQuestions');
+    testQuestionsContainer.innerHTML = '';
+    let question = questions[currentQuestionIndex];
     let div = document.createElement('div');
-    div.textContent = currentQuestion.text;
-    if (currentQuestion.image) {
-        let img = document.createElement('img');
-        img.src = currentQuestion.image;
-        div.appendChild(img);
+    div.textContent = question.text;
+    testQuestionsContainer.appendChild(div);
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        remainingTime--;
+        let minutes = Math.floor(remainingTime / 60);
+        let seconds = remainingTime % 60;
+        document.getElementById('timer').textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        if (remainingTime <= 0) {
+            clearInterval(timerInterval);
+            alert('Time is up!');
+        }
+    }, 1000);
+}
+
+function rateQuestion(rating) {
+    let question = questions[currentQuestionIndex];
+    question.rating = rating;
+    if (currentQuestionIndex < questions.length - 1) {
+        nextQuestion();
     }
-    testQuestionsDiv.appendChild(div);
 }
 
 function nextQuestion() {
@@ -117,27 +119,43 @@ function previousQuestion() {
 }
 
 function submitTest() {
-    alert('Test submitted!');
-    showPage(3);
+    clearInterval(timerInterval);
+    showPage(3); // Go to results page
+}
+
+function showResults() {
+    let okList = document.getElementById('okQuestions');
+    let goodList = document.getElementById('goodQuestions');
+    let bestList = document.getElementById('bestQuestions');
+    
+    okList.innerHTML = '';
+    goodList.innerHTML = '';
+    bestList.innerHTML = '';
+    
+    questions.forEach((question) => {
+        let li = document.createElement('li');
+        li.textContent = question.text;
+        if (question.rating === 'OK') {
+            okList.appendChild(li);
+        } else if (question.rating === 'Good') {
+            goodList.appendChild(li);
+        } else if (question.rating === 'Best') {
+            bestList.appendChild(li);
+        }
+    });
 }
 
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
+    document.querySelector('.container').classList.toggle('dark-mode');
 }
 
 function toggleFullScreen() {
     if (!isFullScreen) {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        } else if (document.documentElement.mozRequestFullScreen) { // Firefox
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
-            document.documentElement.webkitRequestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
-            document.documentElement.msRequestFullscreen();
-        }
+        document.documentElement.requestFullscreen();
         isFullScreen = true;
     } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { // Firefox
+        document.exitFullscreen();
+        isFullScreen = false;
+    }
+}
