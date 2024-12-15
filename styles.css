@@ -88,6 +88,10 @@ button:hover {
     justify-content: space-between;
     width: 400px;
     margin-top: 20px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
 }
 
 #navigationButtons button {
@@ -100,18 +104,10 @@ button:hover {
 }
 
 #imagePreviewContainer img {
-    max-width: 100px;
+    max-width: 400px;
     height: auto;
     margin: 5px;
     border-radius: 5px;
-}
-
-#imagePreview {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-    display: block;
-    max-width: 300px;
 }
 
 #results ul {
@@ -120,7 +116,12 @@ button:hover {
 
 #darkModeBtn, #fullScreenBtn {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
     margin-top: 10px;
+}
+
+#insertBtn, #startTestBtn, #showResultsBtn {
+    display: block;
+    margin: 10px auto;
 }
