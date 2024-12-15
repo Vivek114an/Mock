@@ -1,140 +1,128 @@
-let questions = [];
-let currentQuestionIndex = 0;
-let timerInterval;
-let remainingTime = 2400; // 40 minutes in seconds
-
-function showPage(pageNum) {
-    document.getElementById('page1').classList.add('hidden');
-    document.getElementById('page2').classList.add('hidden');
-    document.getElementById('page3').classList.add('hidden');
-    
-    if (pageNum === 1) {
-        document.getElementById('page1').classList.remove('hidden');
-    } else if (pageNum === 2) {
-        document.getElementById('page2').classList.remove('hidden');
-        loadMockTest();
-        startTimer();
-    } else if (pageNum === 3) {
-        document.getElementById('page3').classList.remove('hidden');
-        showResults();
-    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-function saveQuestion() {
-    let questionText = document.getElementById('questionText').value;
-    let questionImage = document.getElementById('questionImage').files[0];
-    let optionA = document.getElementById('optionA').value;
-    let optionB = document.getElementById('optionB').value;
-    let optionC = document.getElementById('optionC').value;
-    let optionD = document.getElementById('optionD').value;
-
-    let question = {
-        text: questionText,
-        image: questionImage ? URL.createObjectURL(questionImage) : null,
-        options: [optionA, optionB, optionC, optionD],
-        answer: null // Answer is initially not set
-    };
-
-    questions.push(question);
-    alert("Question saved!");
-    updateQuestionsList();
+body.dark-mode {
+    background-color: #333;
+    color: #f4f4f9;
 }
 
-function updateQuestionsList() {
-    let list = document.getElementById('questionsList');
-    list.innerHTML = '';
-    questions.forEach((q, i) => {
-        let li = document.createElement('li');
-        li.textContent = `Q${i + 1}: ${q.text}`;
-        list.appendChild(li);
-    });
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
 }
 
-function loadMockTest() {
-    let testContainer = document.getElementById('testQuestions');
-    testContainer.innerHTML = '';
-
-    let question = questions[currentQuestionIndex];
-    let questionDiv = document.createElement('div');
-    
-    let questionContent = document.createElement('div');
-    if (question.image) {
-        let img = document.createElement('img');
-        img.src = question.image;
-        questionContent.appendChild(img);
-    } else {
-        questionContent.textContent = question.text;
-    }
-    questionDiv.appendChild(questionContent);
-    
-    let optionsDiv = document.createElement('div');
-    question.options.forEach((option, i) => {
-        let label = document.createElement('label');
-        let input = document.createElement('input');
-        input.type = 'radio';
-        input.name = 'question' + currentQuestionIndex;
-        input.value = option;
-        label.appendChild(input);
-        label.append(option);
-        optionsDiv.appendChild(label);
-    });
-
-    questionDiv.appendChild(optionsDiv);
-    testContainer.appendChild(questionDiv);
+.container.dark-mode {
+    background: #444;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
 }
 
-function startTimer() {
-    timerInterval = setInterval(() => {
-        if (remainingTime <= 0) {
-            clearInterval(timerInterval);
-            submitTest();
-        } else {
-            remainingTime--;
-            updateTimerDisplay();
-        }
-    }, 1000);
+h1, h2 {
+    text-align: center;
 }
 
-function updateTimerDisplay() {
-    let minutes = Math.floor(remainingTime / 60);
-    let seconds = remainingTime % 60;
-    document.getElementById('timer').textContent = `Time Left: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+input {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 100%;
 }
 
-function submitTest() {
-    clearInterval(timerInterval);
-
-    questions.forEach((question, index) => {
-        let selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
-        if (selectedOption) {
-            question.answer = selectedOption.value;
-        }
-    });
-    
-    showPage(3);
+button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-function nextQuestion() {
-    if (currentQuestionIndex < questions.length - 1) {
-        currentQuestionIndex++;
-        loadMockTest();
-    }
+button:hover {
+    background: #0056b3;
 }
 
-function previousQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        loadMockTest();
-    }
+.hidden {
+    display: none;
 }
 
-function showResults() {
-    let resultContainer = document.getElementById('results');
-    resultContainer.innerHTML = '';
+#timer {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: red;
+}
 
-    questions.forEach((question, index) => {
-        let resultText = document.createElement('div');
-        resultText.textContent = `Q${index + 1}: ${question.text} - Your answer: ${question.answer || 'Not Attempted'}`;
-        resultContainer.appendChild(resultText);
-    });
+#testQuestions {
+    margin-top: 20px;
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#testQuestions div {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+#testQuestions label {
+    font-size: 16px;
+}
+
+#navigationButtons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+}
+
+#navigationButtons button {
+    width: 90px;
+}
+
+#results {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#questionsList {
+    margin-top: 20px;
+}
+
+#questionsList li {
+    margin-bottom: 10px;
+}
+
+button.toggle {
+    background: #28a745;
+}
+
+button.toggle:hover {
+    background: #218838;
+}
+
+button.toggle.dark-mode {
+    background: #ffc107;
+}
+
+button.toggle.dark-mode:hover {
+    background: #e0a800;
+}
+
+#darkModeBtn, #fullScreenBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    margin-top: 10px;
 }
