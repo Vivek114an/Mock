@@ -50,3 +50,10 @@ button:hover {
 #testQuestions div {
     margin-bottom: 10px;
 }
+
+#timer {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: red;
+}
