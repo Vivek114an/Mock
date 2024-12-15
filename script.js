@@ -91,4 +91,77 @@ function loadMockTest() {
 }
 
 function rateQuestion(rating) {
-    let question =
+    let question = questions[currentQuestionIndex];
+    question.rating = rating;
+    alert(`You rated Question ${currentQuestionIndex + 1} as ${rating}`);
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        if (remainingTime > 0) {
+            remainingTime--;
+            let minutes = Math.floor(remainingTime / 60);
+            let seconds = remainingTime % 60;
+            document.getElementById('timer').textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        } else {
+            clearInterval(timerInterval);
+            alert("Time's up!");
+            submitTest();
+        }
+    }, 1000);
+}
+
+function previousQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadMockTest();
+    }
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        loadMockTest();
+    }
+}
+
+function submitTest() {
+    alert("Test submitted!");
+    showPage(3);
+}
+
+function showResults() {
+    let okList = document.getElementById('okQuestions');
+    let goodList = document.getElementById('goodQuestions');
+    let bestList = document.getElementById('bestQuestions');
+
+    okList.innerHTML = '';
+    goodList.innerHTML = '';
+    bestList.innerHTML = '';
+
+    questions.forEach((q, i) => {
+        let li = document.createElement('li');
+        li.innerHTML = `Q${i + 1}: ${q.text}`;
+        
+        if (q.rating === 'OK') {
+            okList.appendChild(li);
+        } else if (q.rating === 'Good') {
+            goodList.appendChild(li);
+        } else if (q.rating === 'Best') {
+            bestList.appendChild(li);
+        }
+    });
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    document.querySelector('.container').classList.toggle('dark-mode');
+}
+
+function toggleFullScreen() {
+    if (!isFullScreen) {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement
