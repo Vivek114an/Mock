@@ -1,99 +1,71 @@
 let questions = [];
-let currentQuestionIndex = 0;
-let timerInterval;
-let remainingTime = 2400; // 40 minutes in seconds
+let currentQuestion = 0;
 
-// Show the page
-function showPage(pageNum) {
-    // Hide all pages
-    document.getElementById('page1').classList.add('hidden');
-    document.getElementById('page2').classList.add('hidden');
-    document.getElementById('page3').classList.add('hidden');
+document.getElementById('start-btn').addEventListener('click', startTest);
+document.getElementById('next-btn').addEventListener('click', nextQuestion);
+document.getElementById('prev-btn').addEventListener('click', prevQuestion);
+document.getElementById('submit-btn').addEventListener('click', submitTest);
+document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
+document.getElementById('upload-btn').addEventListener('click', uploadImage);
 
-    // Show the selected page
-    if (pageNum === 1) {
-        document.getElementById('page1').classList.remove('hidden');
-        document.getElementById('insertBtn').classList.remove('hidden');
-        document.getElementById('startTestBtn').classList.add('hidden');
-        document.getElementById('showResultsBtn').classList.add('hidden');
-    } else if (pageNum === 2) {
-        document.getElementById('page2').classList.remove('hidden');
-        document.getElementById('insertBtn').classList.add('hidden');
-        document.getElementById('startTestBtn').classList.add('hidden');
-        document.getElementById('showResultsBtn').classList.add('hidden');
-        loadMockTest();
-        startTimer();
-        document.getElementById('navigationButtons').classList.remove('hidden');
-    } else if (pageNum === 3) {
-        document.getElementById('page3').classList.remove('hidden');
-        showResults();
+function startTest() {
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('question-container').style.display = 'block';
+    displayQuestion();
+}
+
+function displayQuestion() {
+    const question = questions[currentQuestion];
+    document.getElementById('question-text').innerText = question.text;
+    document.getElementById('image-preview').innerHTML = question.image ? `<img src="${question.image}" />` : '';
+}
+
+function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        displayQuestion();
     }
 }
 
-// Save questions
-function saveQuestions() {
-    let questionText = document.getElementById('questionText').value;
-    let questionImages = document.getElementById('questionImage').files;
-
-    for (let i = 0; i < questionImages.length; i++) {
-        let question = {
-            text: questionText,
-            image: URL.createObjectURL(questionImages[i]),
-            rating: null // Rating is initially not set
-        };
-        questions.push(question);
-    }
-
-    alert("Questions saved!");
-    document.getElementById('questionText').value = '';
-    document.getElementById('questionImage').value = '';
-    document.getElementById('imagePreviewContainer').innerHTML = '';
-    updateQuestionsList();
-}
-
-// Preview image before saving
-function previewImage() {
-    let files = document.getElementById('questionImage').files;
-    let previewContainer = document.getElementById('imagePreviewContainer');
-    previewContainer.innerHTML = '';
-
-    for (let file of files) {
-        let img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        previewContainer.appendChild(img);
+function prevQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        displayQuestion();
     }
 }
 
-// Update the list of questions
-function updateQuestionsList() {
-    let questionsList = document.getElementById('questionsList');
-    questionsList.innerHTML = '';
+function submitTest() {
+    alert('Test submitted!');
+}
 
-    questions.forEach((question, index) => {
-        let li = document.createElement('li');
-        li.textContent = `Q${index + 1}: ${question.text}`;
-        questionsList.appendChild(li);
+function toggleFullScreen() {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen();
+    }
+}
+
+function uploadImage() {
+    const fileInput = document.getElementById('image-upload');
+    fileInput.click();
+    fileInput.addEventListener('change', function () {
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                questions.push({ text: 'Question ' + (questions.length + 1), image: e.target.result });
+                alert('Image uploaded as a question');
+            };
+            reader.readAsDataURL(file);
+        }
     });
 }
 
-// Load mock test questions
-function loadMockTest() {
-    let testQuestions = document.getElementById('testQuestions');
-    testQuestions.innerHTML = '';
-
-    questions.forEach((question, index) => {
-        let div = document.createElement('div');
-        div.className = 'question';
-        div.innerHTML = `
-            <p>${question.text}</p>
-            <img src="${question.image}" alt="Question Image" class="question-image">
-        `;
-        testQuestions.appendChild(div);
-    });
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
 }
-
-// Start timer for the test
-function startTimer() {
-    timerInterval = setInterval(() => {
-        remainingTime--;
-        document.getElementById('timer').textContent = `Time Left: ${formatTime(remainingTime)}`;
