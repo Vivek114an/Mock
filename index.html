@@ -21,8 +21,6 @@
             </form>
             <h3>Questions List:</h3>
             <ul id="questionsList"></ul>
-            <!-- Only show the button for starting the mock test -->
-            <button onclick="showPage(2)" id="startTestBtn">Start Mock Test</button>
         </div>
 
         <!-- Page 2: Mock Test -->
@@ -37,12 +35,6 @@
                     <button type="button" onclick="rateQuestion('Best')">Best</button>
                 </div>
             </form>
-            <!-- Navigation Buttons (visible only during mock test) -->
-            <div id="navigationButtons">
-                <button type="button" onclick="previousQuestion()">Previous</button>
-                <button type="button" onclick="nextQuestion()">Next</button>
-                <button type="button" onclick="submitTest()">Submit Test</button>
-            </div>
         </div>
 
         <!-- Page 3: Results -->
@@ -56,11 +48,19 @@
             <ul id="bestQuestions"></ul>
         </div>
 
-        <!-- Common Buttons -->
+        <!-- Navigation and Action Buttons -->
         <button onclick="showPage(1)" id="insertBtn">Insert Questions</button>
+        <button onclick="showPage(2)" id="startTestBtn">Start Mock Test</button>
         <button onclick="showPage(3)" id="showResultsBtn">Show Results</button>
         <button onclick="toggleDarkMode()" id="darkModeBtn">Dark Mode</button>
         <button onclick="toggleFullScreen()" id="fullScreenBtn">Full Screen</button>
+
+        <!-- Navigation Buttons (hidden initially) -->
+        <div id="navigationButtons" class="hidden">
+            <button type="button" onclick="previousQuestion()">Previous</button>
+            <button type="button" onclick="nextQuestion()">Next</button>
+            <button type="button" onclick="submitTest()">Submit Test</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
