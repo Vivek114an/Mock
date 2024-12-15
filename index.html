@@ -9,6 +9,8 @@
 <body>
     <div class="container">
         <h1>Mock Test Application</h1>
+
+        <!-- Page 1: Add Questions -->
         <div id="page1">
             <h2>Insert Questions</h2>
             <form id="questionForm">
@@ -20,16 +22,23 @@
                 <input type="text" id="optionD" placeholder="Option D"><br>
                 <button type="button" onclick="saveQuestion()">Save Question</button>
             </form>
+            <h3>Questions List:</h3>
+            <ul id="questionsList"></ul>
         </div>
 
+        <!-- Page 2: Mock Test -->
         <div id="page2" class="hidden">
             <h2>Mock Test</h2>
+            <div id="timer">Time Left: 40:00</div>
             <form id="mockTestForm">
                 <div id="testQuestions"></div>
                 <button type="button" onclick="submitTest()">Submit Test</button>
+                <button type="button" onclick="nextQuestion()">Next</button>
+                <button type="button" onclick="previousQuestion()">Previous</button>
             </form>
         </div>
 
+        <!-- Page 3: Results -->
         <div id="page3" class="hidden">
             <h2>Results</h2>
             <div id="results"></div>
@@ -39,6 +48,7 @@
         <button onclick="showPage(2)">Start Mock Test</button>
         <button onclick="showPage(3)">Show Results</button>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
