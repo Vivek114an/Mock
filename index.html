@@ -32,9 +32,11 @@
             <div id="timer">Time Left: 40:00</div>
             <form id="mockTestForm">
                 <div id="testQuestions"></div>
-                <button type="button" onclick="submitTest()">Submit Test</button>
-                <button type="button" onclick="nextQuestion()">Next</button>
-                <button type="button" onclick="previousQuestion()">Previous</button>
+                <div id="navigationButtons">
+                    <button type="button" onclick="previousQuestion()">Previous</button>
+                    <button type="button" onclick="nextQuestion()">Next</button>
+                    <button type="button" onclick="submitTest()">Submit Test</button>
+                </div>
             </form>
         </div>
 
@@ -47,6 +49,7 @@
         <button onclick="showPage(1)">Insert Questions</button>
         <button onclick="showPage(2)">Start Mock Test</button>
         <button onclick="showPage(3)">Show Results</button>
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
     <script src="script.js"></script>
