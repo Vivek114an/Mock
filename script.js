@@ -15,7 +15,6 @@ function showPage(pageNum) {
         document.getElementById('page2').classList.remove('hidden');
         loadMockTest();
         startTimer();
-        hideButtonsForTest();
     } else if (pageNum === 3) {
         document.getElementById('page3').classList.remove('hidden');
         showResults();
@@ -164,4 +163,22 @@ function toggleFullScreen() {
             document.documentElement.requestFullscreen();
         } else if (document.documentElement.mozRequestFullScreen) { // Firefox
             document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement
+        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome and Safari
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
+        isFullScreen = true;
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        isFullScreen = false;
+    }
+}
